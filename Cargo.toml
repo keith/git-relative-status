@@ -1,0 +1,6 @@
+[package]
+name = "git-relative-status"
+version = "0.1.0"
+authors = ["Keith Smiley <keithbsmiley@gmail.com>"]
+
+[dependencies]
