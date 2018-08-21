@@ -6,7 +6,7 @@ finding interface for editors or shell functions.
 
 # Installation
 
-[Homebrew][https://brew.sh]:
+[Homebrew](https://brew.sh):
 
 ```sh
 brew install keith/formulae/git-relative-status
