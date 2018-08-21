@@ -1,8 +1,5 @@
 extern crate pathdiff;
 
-use std::path::Path;
-use std::path::PathBuf;
-
 fn run_git_command(args: &[&str]) -> Option<String> {
     let output = std::process::Command::new("git")
         .args(args)
@@ -26,7 +23,7 @@ fn run_git_command(args: &[&str]) -> Option<String> {
 
 fn main() {
     let git_dir = match run_git_command(&["rev-parse", "--show-toplevel"]) {
-        Some(output) => PathBuf::from(&output),
+        Some(output) => std::path::PathBuf::from(&output),
         None => {
             eprintln!("Not in git repo");
             std::process::exit(1);
@@ -48,7 +45,7 @@ fn main() {
             .expect("No space in line, unexpected output from git status");
         let (file_status, file) = line.split_at(idx);
         if file_status != "D" {
-            let file_path = Path::new(file.trim());
+            let file_path = std::path::Path::new(file.trim());
             let relative_path =
                 pathdiff::diff_paths(file_path, &path_from_root)
                     .expect("File must be in git repo");
