@@ -1,14 +1,10 @@
 extern crate pathdiff;
 
-use pathdiff::diff_paths;
-use std::env::current_dir;
 use std::path::Path;
 use std::path::PathBuf;
-use std::process::Command;
-use std::str::from_utf8;
 
 fn run_git_command(args: &[&str]) -> Option<String> {
-    let output = Command::new("git")
+    let output = std::process::Command::new("git")
         .args(args)
         .output()
         .expect("Failed to run git command");
@@ -17,7 +13,7 @@ fn run_git_command(args: &[&str]) -> Option<String> {
         return None;
     };
 
-    let stdout = from_utf8(&output.stdout)
+    let stdout = std::str::from_utf8(&output.stdout)
         .expect("Failed to decode string")
         .trim();
 
@@ -42,9 +38,9 @@ fn main() {
         None => std::process::exit(0),
     };
 
-    let pwd = current_dir().expect("Couldn't fetch pwd");
-    let path_from_root =
-        diff_paths(&pwd, &git_dir).expect("Both paths should be absolute");
+    let pwd = std::env::current_dir().expect("Couldn't fetch pwd");
+    let path_from_root = pathdiff::diff_paths(&pwd, &git_dir)
+        .expect("Both paths should be absolute");
 
     for line in status.lines().map(|x| x.trim()) {
         let idx = line
@@ -53,8 +49,9 @@ fn main() {
         let (file_status, file) = line.split_at(idx);
         if file_status != "D" {
             let file_path = Path::new(file.trim());
-            let relative_path = diff_paths(file_path, &path_from_root)
-                .expect("File must be in git repo");
+            let relative_path =
+                pathdiff::diff_paths(file_path, &path_from_root)
+                    .expect("File must be in git repo");
             println!("{}", relative_path.display());
         }
     }
