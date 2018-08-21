@@ -14,7 +14,7 @@ fn run_git_command(args: &[&str]) -> Option<String> {
         .expect("Failed to run git command");
 
     if !output.status.success() {
-        panic!("Command failed");
+        return None;
     };
 
     let stdout = from_utf8(&output.stdout)
@@ -31,7 +31,10 @@ fn run_git_command(args: &[&str]) -> Option<String> {
 fn main() {
     let git_dir = match run_git_command(&["rev-parse", "--show-toplevel"]) {
         Some(output) => PathBuf::from(&output),
-        None => panic!("Not in git directory"),
+        None => {
+            eprintln!("Not in git repo");
+            std::process::exit(1);
+        }
     };
 
     let status = match run_git_command(&["status", "--porcelain"]) {
