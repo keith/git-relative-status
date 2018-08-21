@@ -36,7 +36,7 @@ fn main() {
 
     let status = match run_git_command(&["status", "--porcelain"]) {
         Some(output) => output,
-        None => panic!("No status"),
+        None => std::process::exit(0),
     };
 
     let pwd = current_dir().expect("Couldn't fetch pwd");
