@@ -4,3 +4,5 @@ version = "0.1.0"
 authors = ["Keith Smiley <keithbsmiley@gmail.com>"]
 
 [dependencies]
+# this crate copied a relative path implementation from rustc
+pathdiff = "0.1.0"
