@@ -32,6 +32,12 @@ fn test_simple_rename() {
     assert_eq!(new_file_from_rename("foo.txt -> bar.txt"), "bar.txt");
 }
 
+#[test]
+#[should_panic(expected = "Had file with '->' in the name")]
+fn test_complex_rename() {
+    new_file_from_rename("\"foo -> bar.txt\" -> baz.txt");
+}
+
 fn file_path_for_line(line: &str) -> Option<String> {
     let trimmed = line.trim();
     let idx = trimmed
