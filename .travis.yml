@@ -4,14 +4,15 @@ env:
 script:
   - cargo build --verbose --all
   - cargo test --verbose --all
+rust:
+  - beta
+  - nightly
+  - stable
 
 matrix:
   include:
-    - rust: beta
-    - rust: nightly-2018-08-24
-    - rust: nightly-2018-08-24
+    - rust: nightly
       before_script:
         - rustup component add rustfmt-preview --toolchain nightly
       script:
         - cargo +nightly fmt --all -- --check
-    - rust: stable
