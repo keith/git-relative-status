@@ -21,20 +21,6 @@ fn run_git_command(args: &[&str]) -> Option<String> {
     return Some(String::from(stdout));
 }
 
-fn trim_quotes(string: &str) -> String {
-    string.trim_matches('"').to_string()
-}
-
-#[test]
-fn test_trim_quotes() {
-    assert_eq!(trim_quotes("\"foo bar.txt\""), "foo bar.txt")
-}
-
-#[test]
-fn test_trim_multiple_quotes() {
-    assert_eq!(trim_quotes("\"\"foo bar.txt\""), "foo bar.txt")
-}
-
 fn new_file_from_rename(line: &str) -> String {
     let files: Vec<&str> = line.split(" -> ").collect();
     assert!(files.len() == 2, "Had file with '->' in the name");
@@ -57,7 +43,7 @@ fn file_path_for_line(line: &str) -> Option<String> {
         "D" => None,
         "R" | "C" => Some(new_file_from_rename(&file.trim())),
         _ => Some(file.trim().to_string()),
-    }.map(|x| trim_quotes(&x))
+    }.map(|x| x.trim_matches('"').to_string())
 }
 
 #[test]
