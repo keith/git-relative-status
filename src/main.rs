@@ -73,7 +73,10 @@ fn test_path_for_deleted_line() {
     assert_eq!(file_path_for_line(" D foo.txt"), None);
 }
 
-fn paths_for_lines(lines: Vec<&str>) -> Vec<std::path::PathBuf> {
+fn paths_for_lines<'a, I>(lines: I) -> Vec<std::path::PathBuf>
+where
+    I: Iterator<Item = &'a str>,
+{
     lines
         .into_iter()
         .filter_map(file_path_for_line)
@@ -83,7 +86,7 @@ fn paths_for_lines(lines: Vec<&str>) -> Vec<std::path::PathBuf> {
 
 #[test]
 fn test_getting_paths_from_lines() {
-    let lines = [
+    let lines = vec![
         " M foo.txt",
         " M \"bar baz.txt\"",
         " R qux.txt -> quxx.txt",
@@ -96,7 +99,7 @@ fn test_getting_paths_from_lines() {
             .map(std::path::PathBuf::from)
             .collect();
 
-    assert_eq!(paths_for_lines(lines.to_vec()), expected)
+    assert_eq!(paths_for_lines(lines.into_iter()), expected)
 }
 
 fn main() {
@@ -117,7 +120,7 @@ fn main() {
     let path_from_root = pathdiff::diff_paths(&pwd, &git_dir)
         .expect("Both paths should be absolute");
 
-    for file_path in paths_for_lines(status.lines().collect()) {
+    for file_path in paths_for_lines(status.lines()) {
         let relative_path = pathdiff::diff_paths(&file_path, &path_from_root)
             .expect("File must be in git repo");
         println!("\"{}\"", relative_path.display());
