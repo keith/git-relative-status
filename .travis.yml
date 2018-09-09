@@ -1,0 +1,18 @@
+language: rust
+env:
+  - RUSTFLAGS="-D warnings"
+script:
+  - cargo build --verbose --all
+  - cargo test --verbose --all
+rust:
+  - beta
+  - nightly
+  - stable
+
+matrix:
+  include:
+    - rust: nightly
+      before_script:
+        - rustup component add rustfmt-preview --toolchain nightly
+      script:
+        - cargo +nightly fmt --all -- --check
