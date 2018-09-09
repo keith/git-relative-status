@@ -61,6 +61,22 @@ fn test_path_for_modified_line() {
 }
 
 #[test]
+fn test_path_for_renamed_line() {
+    assert_eq!(
+        file_path_for_line(" R foo.txt -> bar.txt"),
+        Some("bar.txt".to_string())
+    );
+}
+
+#[test]
+fn test_path_for_changed_line() {
+    assert_eq!(
+        file_path_for_line(" C foo.txt -> bar.txt"),
+        Some("bar.txt".to_string())
+    );
+}
+
+#[test]
 fn test_path_for_deleted_line() {
     assert_eq!(file_path_for_line(" D foo.txt"), None);
 }
