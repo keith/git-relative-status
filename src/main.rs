@@ -48,7 +48,8 @@ fn file_path_for_line(line: &str) -> Option<String> {
     match file_status {
         "R" | "C" => Some(new_file_from_rename(&file.trim())),
         _ => Some(file.trim().to_string()),
-    }.map(|x| x.trim_matches('"').to_string())
+    }
+    .map(|x| x.trim_matches('"').to_string())
 }
 
 #[test]
