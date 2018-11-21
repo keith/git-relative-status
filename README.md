@@ -56,9 +56,6 @@ $ time git-relative-status.py # Python
 
 ### TODO
 
-- This currently uses my personal filtering preferences, currently it
-  excludes deleted files. These options should be provided by command
-  line arguments instead.
 - This currently doesn't output the specific status, assuming consumers
   won't care about it for the original use case. This should also be an
   option.
