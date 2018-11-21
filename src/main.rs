@@ -46,10 +46,10 @@ fn file_path_for_line(line: &str) -> Option<String> {
     let (file_status, file) = trimmed.split_at(idx);
 
     match file_status {
-        "D" => None,
         "R" | "C" => Some(new_file_from_rename(&file.trim())),
         _ => Some(file.trim().to_string()),
-    }.map(|x| x.trim_matches('"').to_string())
+    }
+    .map(|x| x.trim_matches('"').to_string())
 }
 
 #[test]
@@ -78,7 +78,10 @@ fn test_path_for_changed_line() {
 
 #[test]
 fn test_path_for_deleted_line() {
-    assert_eq!(file_path_for_line(" D foo.txt"), None);
+    assert_eq!(
+        file_path_for_line(" D foo.txt"),
+        Some("foo.txt".to_string())
+    );
 }
 
 fn paths_for_lines<'a, I>(lines: I) -> Vec<std::path::PathBuf>
@@ -102,7 +105,7 @@ fn test_getting_paths_from_lines() {
     ];
 
     let expected: Vec<std::path::PathBuf> =
-        ["foo.txt", "bar baz.txt", "quxx.txt"]
+        ["foo.txt", "bar baz.txt", "quxx.txt", "deleted.txt"]
             .iter()
             .map(std::path::PathBuf::from)
             .collect();
