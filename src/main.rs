@@ -46,7 +46,7 @@ fn file_path_for_line(line: &str) -> Option<String> {
     let (file_status, file) = trimmed.split_at(idx);
 
     match file_status {
-        "R" | "C" => Some(new_file_from_rename(&file.trim())),
+        "R" | "C" | "RM" | "CM" => Some(new_file_from_rename(&file.trim())),
         _ => Some(file.trim().to_string()),
     }
     .map(|x| x.trim_matches('"').to_string())
@@ -73,6 +73,14 @@ fn test_path_for_changed_line() {
     assert_eq!(
         file_path_for_line(" C foo.txt -> bar.txt"),
         Some("bar.txt".to_string())
+    );
+}
+
+#[test]
+fn test_path_for_rename_modified_line() {
+    assert_eq!(
+        file_path_for_line("RM tools/foo/__main__.py -> tools/foo/main.py"),
+        Some("tools/foo/main.py".to_string())
     );
 }
 
